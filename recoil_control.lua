@@ -33,6 +33,7 @@ EnableRCS = true --- When Set to false, it'll turn off Recoil Control!
 RecoilControlMode = "ASH" --- Presets: "Low", "Medium", "High", "Ultra", "Insanity", "ASH", "BUCK", "Custom"
 
 RcCustomStrength = 7 -- Value MUST be ROUNDED! No Decimal values such as 6.5!
+RcCustomHStrength = 0 -- Horizontal strength for Custom mode. Positive = right, Negative = left.
 
 RequireToggle = true -- Change to false if you want it to always be on.
 
@@ -40,35 +41,19 @@ ToggleKey = "CapsLock" -- Usable Keys: "CapsLock", "NumLock", "ScrollLock"
 
 DelayRate = 7 -- DO NOT CHANGE IF YOU DON'T KNOW WHAT YOU'RE DOING.
 
+EnableHorizontalRCS = true -- Set to false to disable horizontal compensation entirely.
 
----                           H O R I Z O N T A L  R E C O I L                            ----
 
-EnableHorizontalRCS = true -- Set to true to enable horizontal recoil compensation.
-
-HorizontalRecoilMode = "" --- Presets: "Low", "Medium", "High", "Ultra", "Insanity", "Custom"
-                            --- Leave "" to use the per-mode default set in Recoil Presets below.
-
-HrCustomStrength = 2 -- Value MUST be ROUNDED! Positive = drift right, Negative = drift left.
-
----                                                                                         ----
 
 
 --[[
        HOW TO USE FOR DUMBIES,
   (RC)
 1: If the  "EnableRCS" is set to false, change to true.
-2: Adjust your Recoil Control Strength, either by using a preset or a custom value!
-3: Toggle it on (if you have ForceToggle enabled, else just do step 4.)
-4: Hold Mouse1 and Mouse2 (LeftClick and RightClick) and it should drag your cursor downwards.
+2: Pick your RecoilControlMode preset. Each preset has vertical AND horizontal baked in.
+3: Toggle it on (if you have RequireToggle enabled, else just do step 4.)
+4: Hold Mouse1 and Mouse2 (LeftClick and RightClick) and it should control your recoil.
 5: Aim at your target and your done!
-
-
-  (Horizontal RC)
-1: Set "EnableHorizontalRCS" to true.
-2: Adjust "HorizontalRecoilMode" or use "Custom" with "HrCustomStrength".
-3: Leave HorizontalRecoilMode = "" to use each mode's built-in horizontal default.
-4: Positive values compensate for right drift, negative values for left drift.
-5: Works alongside vertical recoil control automatically.
 
 
 
@@ -78,14 +63,13 @@ HrCustomStrength = 2 -- Value MUST be ROUNDED! Positive = drift right, Negative 
 2: You don't need to hold down your toggle key, its a toggle.
 3: You must hold mouse1 and mouse2, or else IT WONT WORK!
 4: DelayRate Works in MS, the lower the faster. 7ms = 0.07s, 2000ms = 2s. However the preset Delay rate is perfect for most FPS games.
-5: Horizontal recoil compensation uses negative X movement to counteract rightward drift (and vice versa).
+5: Horizontal strength is part of each preset. Set EnableHorizontalRCS = false to zero it out.
 --]]
 
 
 
 
 -------------  Recoil Presets ------
--- Each mode sets a default HorizontalRecoilStrength; the horizontal section below can override it.
 if RecoilControlMode == "Low" then
   RecoilControlStrength = 2
   HorizontalRecoilStrength = 1
@@ -109,30 +93,15 @@ elseif RecoilControlMode == "BUCK" then
   HorizontalRecoilStrength = 0
 elseif RecoilControlMode == "Custom" then
   RecoilControlStrength = RcCustomStrength
-  HorizontalRecoilStrength = 0
+  HorizontalRecoilStrength = RcCustomHStrength
 end
 
--------------  Horizontal Recoil Presets ------
--- If EnableHorizontalRCS is false, force to 0.
--- If HorizontalRecoilMode is "" or unrecognized, the per-mode default above is kept.
 if not EnableHorizontalRCS then
   HorizontalRecoilStrength = 0
-elseif HorizontalRecoilMode == "Low" then
-  HorizontalRecoilStrength = 1
-elseif HorizontalRecoilMode == "Medium" then
-  HorizontalRecoilStrength = 3
-elseif HorizontalRecoilMode == "High" then
-  HorizontalRecoilStrength = 5
-elseif HorizontalRecoilMode == "Ultra" then
-  HorizontalRecoilStrength = 8
-elseif HorizontalRecoilMode == "Insanity" then
-  HorizontalRecoilStrength = 15
-elseif HorizontalRecoilMode == "Custom" then
-  HorizontalRecoilStrength = HrCustomStrength
 end
 --------------------------------------
 
-EnablePrimaryMouseButtonEvents  (true);
+EnablePrimaryMouseButtonEvents(true);
 function OnEvent(event,arg)
 if EnableRCS ~= false then
 if RequireToggle ~= false then
