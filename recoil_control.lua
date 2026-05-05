@@ -30,7 +30,7 @@ $R@i.~~ !     :   ~$$$$$B$$en:``
 
 EnableRCS = true --- When Set to false, it'll turn off Recoil Control!
 
-RecoilControlMode = "High" --- Presets: "Low", "Medium", "High", "Ultra", "Insanity", "Custom"
+RecoilControlMode = "ASH" --- Presets: "Low", "Medium", "High", "Ultra", "Insanity", "ASH", "BUCK", "Custom"
 
 RcCustomStrength = 7 -- Value MUST be ROUNDED! No Decimal values such as 6.5!
 
@@ -43,9 +43,10 @@ DelayRate = 7 -- DO NOT CHANGE IF YOU DON'T KNOW WHAT YOU'RE DOING.
 
 ---                           H O R I Z O N T A L  R E C O I L                            ----
 
-EnableHorizontalRCS = false --- Set to true to enable horizontal recoil compensation.
+EnableHorizontalRCS = true -- Set to true to enable horizontal recoil compensation.
 
-HorizontalRecoilMode = "Low" --- Presets: "Low", "Medium", "High", "Ultra", "Insanity", "Custom"
+HorizontalRecoilMode = "" --- Presets: "Low", "Medium", "High", "Ultra", "Insanity", "Custom"
+                            --- Leave "" to use the per-mode default set in Recoil Presets below.
 
 HrCustomStrength = 2 -- Value MUST be ROUNDED! Positive = drift right, Negative = drift left.
 
@@ -65,8 +66,9 @@ HrCustomStrength = 2 -- Value MUST be ROUNDED! Positive = drift right, Negative 
   (Horizontal RC)
 1: Set "EnableHorizontalRCS" to true.
 2: Adjust "HorizontalRecoilMode" or use "Custom" with "HrCustomStrength".
-3: Positive values compensate for right drift, negative values for left drift.
-4: Works alongside vertical recoil control automatically.
+3: Leave HorizontalRecoilMode = "" to use each mode's built-in horizontal default.
+4: Positive values compensate for right drift, negative values for left drift.
+5: Works alongside vertical recoil control automatically.
 
 
 
@@ -83,37 +85,50 @@ HrCustomStrength = 2 -- Value MUST be ROUNDED! Positive = drift right, Negative 
 
 
 -------------  Recoil Presets ------
+-- Each mode sets a default HorizontalRecoilStrength; the horizontal section below can override it.
 if RecoilControlMode == "Low" then
   RecoilControlStrength = 2
+  HorizontalRecoilStrength = 1
 elseif RecoilControlMode == "Medium" then
   RecoilControlStrength = 6
+  HorizontalRecoilStrength = 1
 elseif RecoilControlMode == "High" then
   RecoilControlStrength = 8
+  HorizontalRecoilStrength = 1
 elseif RecoilControlMode == "Ultra" then
   RecoilControlStrength = 12
+  HorizontalRecoilStrength = 1
+elseif RecoilControlMode == "ASH" then
+  RecoilControlStrength = 8
+  HorizontalRecoilStrength = 0
 elseif RecoilControlMode == "Insanity" then
   RecoilControlStrength = 31
+  HorizontalRecoilStrength = 1
+elseif RecoilControlMode == "BUCK" then
+  RecoilControlStrength = 7
+  HorizontalRecoilStrength = 0
 elseif RecoilControlMode == "Custom" then
   RecoilControlStrength = RcCustomStrength
+  HorizontalRecoilStrength = 0
 end
 
 -------------  Horizontal Recoil Presets ------
-if EnableHorizontalRCS then
-  if HorizontalRecoilMode == "Low" then
-    HorizontalRecoilStrength = 1
-  elseif HorizontalRecoilMode == "Medium" then
-    HorizontalRecoilStrength = 3
-  elseif HorizontalRecoilMode == "High" then
-    HorizontalRecoilStrength = 5
-  elseif HorizontalRecoilMode == "Ultra" then
-    HorizontalRecoilStrength = 8
-  elseif HorizontalRecoilMode == "Insanity" then
-    HorizontalRecoilStrength = 15
-  elseif HorizontalRecoilMode == "Custom" then
-    HorizontalRecoilStrength = HrCustomStrength
-  end
-else
+-- If EnableHorizontalRCS is false, force to 0.
+-- If HorizontalRecoilMode is "" or unrecognized, the per-mode default above is kept.
+if not EnableHorizontalRCS then
   HorizontalRecoilStrength = 0
+elseif HorizontalRecoilMode == "Low" then
+  HorizontalRecoilStrength = 1
+elseif HorizontalRecoilMode == "Medium" then
+  HorizontalRecoilStrength = 3
+elseif HorizontalRecoilMode == "High" then
+  HorizontalRecoilStrength = 5
+elseif HorizontalRecoilMode == "Ultra" then
+  HorizontalRecoilStrength = 8
+elseif HorizontalRecoilMode == "Insanity" then
+  HorizontalRecoilStrength = 15
+elseif HorizontalRecoilMode == "Custom" then
+  HorizontalRecoilStrength = HrCustomStrength
 end
 --------------------------------------
 
